@@ -6,8 +6,8 @@ public class MapGenerator : MonoBehaviour
 {
     List<GameObject> cubes=new List<GameObject> ();
 
-    int xSize = 30;
-    int zSize = 30;
+    int xSize = 20;
+    int zSize = 20;
 
     float height = 0.1f;
 
@@ -53,7 +53,7 @@ public class MapGenerator : MonoBehaviour
 
     void UpdateCube()
     {
-        foreach(GameObject cube in cubes)
+        /*foreach(GameObject cube in cubes)
         {
             Vector3 positionUp = new Vector3(cube.transform.position.x, cube.transform.position.y+1, cube.transform.position.z);
             bool isTop = CheckIfCubeExists(positionUp);
@@ -61,11 +61,15 @@ public class MapGenerator : MonoBehaviour
             Vector3 positionDown = new Vector3(cube.transform.position.x, cube.transform.position.y-1, cube.transform.position.z);
             bool isBottom=CheckIfCubeExists(positionDown);
 
+
+
             Vector3 positionLeft = new Vector3(cube.transform.position.x, cube.transform.position.y, cube.transform.position.z - 1);
             bool isLeft=CheckIfCubeExists(positionLeft);
 
             Vector3 positionRight = new Vector3(cube.transform.position.x, cube.transform.position.y, cube.transform.position.z + 1);
             bool isRight = CheckIfCubeExists(positionRight);
+
+
 
             Vector3 positionFront = new Vector3(cube.transform.position.x + 1, cube.transform.position.y, cube.transform.position.z);
             bool isFront = CheckIfCubeExists(positionFront);
@@ -83,6 +87,41 @@ public class MapGenerator : MonoBehaviour
             mesh.RecalculateNormals();
             cube.GetComponent<MeshFilter>().mesh = mesh;
 
+        }*/
+
+        for(int i = 0; i < cubes.Count; i++)
+        {
+            Vector3 positionUp = new Vector3(cubes[i].transform.position.x, cubes[i].transform.position.y + 1, cubes[i].transform.position.z);
+            bool isTop = CheckIfCubeExists(positionUp,i+1);
+
+            Vector3 positionDown = new Vector3(cubes[i].transform.position.x, cubes[i].transform.position.y - 1, cubes[i].transform.position.z);
+            bool isBottom = CheckIfCubeExists(positionDown,i-1);
+
+
+
+            Vector3 positionLeft = new Vector3(cubes[i].transform.position.x, cubes[i].transform.position.y, cubes[i].transform.position.z - 1);
+            bool isLeft = CheckIfCubeExists(positionLeft);
+
+            Vector3 positionRight = new Vector3(cubes[i].transform.position.x, cubes[i].transform.position.y, cubes[i].transform.position.z + 1);
+            bool isRight = CheckIfCubeExists(positionRight);
+
+
+
+            Vector3 positionFront = new Vector3(cubes[i].transform.position.x + 1, cubes[i].transform.position.y, cubes[i].transform.position.z);
+            bool isFront = CheckIfCubeExists(positionFront);
+
+            Vector3 positionBack = new Vector3(cubes[i].transform.position.x - 1, cubes[i].transform.position.y, cubes[i].transform.position.z);
+            bool isBack = CheckIfCubeExists(positionBack);
+
+
+            MeshData meshData = new MeshData();
+
+            Mesh mesh = new Mesh();
+            mesh.vertices = meshData.vertices.ToArray();
+            meshData.UpdateTriangleData(isTop, isBottom, isRight, isLeft, isFront, isBack);
+            mesh.triangles = meshData.triangles.ToArray();
+            mesh.RecalculateNormals();
+            cubes[i].GetComponent<MeshFilter>().mesh = mesh;
         }
     }
 
@@ -94,6 +133,18 @@ public class MapGenerator : MonoBehaviour
             {
                 return true;
             }
+        }
+        return false;
+    }
+
+    bool CheckIfCubeExists(Vector3 direction,int index)
+    {
+        if (index>=0 && index < cubes.Count)
+        {
+            Debug.Log(index);
+            Debug.Log(direction);
+            Debug.Log("###");
+            if (cubes[index].transform.position == direction) { return true; }
         }
         return false;
     }
