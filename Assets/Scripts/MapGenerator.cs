@@ -39,6 +39,7 @@ public class MapGenerator : MonoBehaviour
     void GenerateCubes(int x, int y, int z)
     {
         GameObject cube = new GameObject("Cube");
+        cube.AddComponent<BoxCollider>();
         MeshFilter meshFilter=cube.AddComponent<MeshFilter>();
         cube.AddComponent<MeshRenderer>().material=new Material(Shader.Find("Standard"));
 
